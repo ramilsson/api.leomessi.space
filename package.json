@@ -1,0 +1,30 @@
+{
+  "name": "api.leomessi.space",
+  "version": "0.1.0",
+  "description": "",
+  "main": ".build/app.js",
+  "scripts": {
+    "dev": "nodemon -r dotenv/config src/app.ts",
+    "build": "tsc -p tsconfig.json",
+    "start": "npm run build && node -r dotenv/config .build/app.js"
+  },
+  "author": "Ruslan Khuzhin <khuzh.n@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "fastify": "^3.15.1",
+    "fastify-mysql": "^2.1.0",
+    "fastify-plugin": "^3.0.0",
+    "module-alias": "^2.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^16.9.3",
+    "@typescript-eslint/eslint-plugin": "^4.31.1",
+    "@typescript-eslint/parser": "^4.31.1",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.3.0",
+    "nodemon": "^2.0.12",
+    "ts-node": "^10.2.1",
+    "typescript": "^4.4.3"
+  }
+}
