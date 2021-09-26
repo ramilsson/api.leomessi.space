@@ -7,7 +7,7 @@ interface IParams {
 }
 
 const gameRoutes: FastifyPluginAsync = async (fastify) => {
-  await fastify.register(gameService, { mysql: fastify.mysql });
+  await fastify.register(gameService);
 
   fastify.get('/games', async (request, reply) => {
     const games = await fastify.gameService.getGames();

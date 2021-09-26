@@ -1,127 +1,44 @@
 import fp from 'fastify-plugin';
-import { GAME_STATUSES } from './constants';
-import { formatResult } from './helpers';
 import { FastifyPluginAsync } from 'fastify';
-import { MySQLPromisePool } from 'fastify-mysql';
+import gameRepository, { GameRepository } from '../repository';
+import { formatResult } from './helpers';
+
+import { IGameRow } from '../repository/types';
+import { GameStatus } from './types';
 
 interface IGameService {
-  mysql: MySQLPromisePool;
+  repository: GameRepository;
 
-  getGames: () => void;
-  getGame: (id: number) => void;
+  getGames: () => Promise<IGameRow[]>;
+  getGame: (id: number) => Promise<IGameRow>;
 }
 
 class GameService implements IGameService {
-  mysql: MySQLPromisePool;
+  repository: GameRepository;
 
-  constructor(mysql: MySQLPromisePool) {
-    this.mysql = mysql;
+  constructor(repository: GameRepository) {
+    this.repository = repository;
   }
 
   getGames = async () => {
-    const connection = await this.mysql.getConnection();
-    const [result] = await connection.execute(`
-      SELECT
-      games.id 'id',
-      json_object (
-        'id', team.id,
-        'name', team.name
-      ) 'team',
-      json_object (
-        'id', opponent.id,
-        'name', opponent.name
-      ) 'opponent',
-      json_object (
-        'id', competitions.id,
-        'name', competitions.name
-      ) 'competition',
-      games.season 'season',
-      games.round 'round',
-      games.field 'field',
-      json_object (
-        'id', stadiums.id,
-        'name', stadiums.name
-      ) 'stadium',
-      games.status 'status',
-      games.datetime 'datetime',
-      json_object (
-        'fulltime', games.fulltime_result,
-        'overtime', games.overtime_result,
-        'penalty', games.penalty_result
-      ) 'result'
-      FROM games
-      LEFT JOIN teams AS team ON games.team = team.id
-      LEFT JOIN teams AS opponent ON games.opponent = opponent.id
-      LEFT JOIN competitions ON games.competition = competitions.id
-      LEFT JOIN stadiums ON games.stadium = stadiums.id
-      GROUP BY games.id
-    `);
+    const games = await this.repository.getGames();
 
-    connection.release();
-
-    return result;
-
-    // const games = result.map((game) => {
-    //   if (game.status === GAME_STATUSES.FINISHED && game.result.fulltime) {
-    //     game.result = formatResult(game.result);
-    //   }
-    //   return game;
-    // });
-
-    // return games;
+    return games.map((game) => {
+      if (game.status === GameStatus.FINISHED && game.result.fulltime) {
+        game.result = formatResult(game.result);
+      }
+      return game;
+    });
   };
 
   getGame = async (id: number) => {
-    const connection = await this.mysql.getConnection();
-    const result = await connection.execute(`
-      SELECT
-      games.id 'id',
-      json_object (
-        'id', team.id,
-        'name', team.name
-      ) 'team',
-      json_object (
-          'id', opponent.id,
-          'name', opponent.name
-      ) 'opponent',
-      json_object (
-        'id', competitions.id,
-        'name', competitions.name
-      ) 'competition',
-      games.season 'season',
-      games.round 'round',
-      games.field 'field',
-      json_object (
-        'id', stadiums.id,
-        'name', stadiums.name
-      ) 'stadium',
-      games.status 'status',
-      games.datetime 'datetime',
-      json_object (
-        'fulltime', games.fulltime_result,
-        'overtime', games.overtime_result,
-        'penalty', games.penalty_result
-      ) 'result'
-      FROM games
-      LEFT JOIN teams AS team ON games.team = team.id
-      LEFT JOIN teams AS opponent ON games.opponent = opponent.id
-      LEFT JOIN competitions ON games.competition = competitions.id
-      LEFT JOIN stadiums ON games.stadium = stadiums.id
-      WHERE games.id = ${id}
-      LIMIT 1
-    `);
+    const game = await this.repository.getGame(id);
 
-    connection.release();
+    if (game.status === GameStatus.FINISHED && game.result.fulltime) {
+      game.result = formatResult(game.result);
+    }
 
-    return result;
-
-    // const [game] = result;
-
-    // if (game.status === GAME_STATUSES.FINISHED && game.result.fulltime) {
-    //   game.result = formatResult(game.result);
-    // }
-
-    // return game;
+    return game;
   };
 }
 
@@ -131,8 +48,10 @@ declare module 'fastify' {
   }
 }
 
-const gameService: FastifyPluginAsync<{mysql: MySQLPromisePool}> = async (fastify, opts) => {
-  fastify.decorate('gameService', new GameService(opts.mysql));
+const gameService: FastifyPluginAsync = async (fastify) => {
+  await fastify.register(gameRepository);
+
+  fastify.decorate('gameService', new GameService(fastify.gameRepository));
 };
 
 export default fp(gameService);
