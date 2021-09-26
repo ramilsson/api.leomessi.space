@@ -32,8 +32,8 @@ export interface IGameRow extends RowDataPacket {
   status: number;
   datetime: string;
   result: {
-    fulltime: number[];
-    overtime: number[];
-    penalty: number[];
+    fulltime: string | null;
+    overtime: string | null;
+    penalty: string | null;
   };
 }
