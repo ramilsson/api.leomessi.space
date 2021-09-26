@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin';
-import fastifyMysql, { MySQLPromisePool } from 'fastify-mysql';
 import { FastifyPluginAsync } from 'fastify';
+import fastifyMysql, { MySQLPromisePool } from 'fastify-mysql';
 
 declare module 'fastify' {
   interface FastifyInstance {

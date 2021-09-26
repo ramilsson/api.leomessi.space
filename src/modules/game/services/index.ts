@@ -4,14 +4,14 @@ import { formatResult } from './helpers';
 import { FastifyPluginAsync } from 'fastify';
 import { MySQLPromisePool } from 'fastify-mysql';
 
-interface IGamesService {
+interface IGameService {
   mysql: MySQLPromisePool;
 
   getGames: () => void;
   getGame: (id: number) => void;
 }
 
-class GamesService implements IGamesService {
+class GameService implements IGameService {
   mysql: MySQLPromisePool;
 
   constructor(mysql: MySQLPromisePool) {
@@ -59,19 +59,21 @@ class GamesService implements IGamesService {
 
     connection.release();
 
-    const games = result.map((game) => {
-      if (game.status === GAME_STATUSES.FINISHED && game.result.fulltime) {
-        game.result = formatResult(game.result);
-      }
-      return game;
-    });
+    return result;
 
-    return games;
+    // const games = result.map((game) => {
+    //   if (game.status === GAME_STATUSES.FINISHED && game.result.fulltime) {
+    //     game.result = formatResult(game.result);
+    //   }
+    //   return game;
+    // });
+
+    // return games;
   };
 
   getGame = async (id: number) => {
     const connection = await this.mysql.getConnection();
-    const [result] = await connection.execute(`
+    const result = await connection.execute(`
       SELECT
       games.id 'id',
       json_object (
@@ -106,28 +108,31 @@ class GamesService implements IGamesService {
       LEFT JOIN competitions ON games.competition = competitions.id
       LEFT JOIN stadiums ON games.stadium = stadiums.id
       WHERE games.id = ${id}
+      LIMIT 1
     `);
 
     connection.release();
 
-    const [game] = result;
+    return result;
 
-    if (game.status === GAME_STATUSES.FINISHED && game.result.fulltime) {
-      game.result = formatResult(game.result);
-    }
+    // const [game] = result;
 
-    return game;
+    // if (game.status === GAME_STATUSES.FINISHED && game.result.fulltime) {
+    //   game.result = formatResult(game.result);
+    // }
+
+    // return game;
   };
 }
 
 declare module 'fastify' {
   interface FastifyInstance {
-    gamesService: GamesService;
+    gameService: GameService;
   }
 }
 
-const gamesService: FastifyPluginAsync = async (fastify) => {
-  fastify.decorate('gamesService', new GamesService(fastify.mysql));
+const gameService: FastifyPluginAsync<{mysql: MySQLPromisePool}> = async (fastify, opts) => {
+  fastify.decorate('gameService', new GameService(opts.mysql));
 };
 
-export default fp(gamesService, { name: 'gamesService' });
+export default fp(gameService);

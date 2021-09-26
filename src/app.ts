@@ -1,11 +1,11 @@
 import fastify from 'fastify';
-import mysql from './plugins/mysql';
-import routes from './routes';
+import plugins from './plugins';
+import modules from './modules';
 
 const server = fastify({ logger: true });
 
-server.register(mysql);
-server.register(routes);
+server.register(plugins);
+server.register(modules);
 
 const start = async () => {
   try {
