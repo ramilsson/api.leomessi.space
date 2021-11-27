@@ -1,3 +1,6 @@
 {
-  "ext": "ts, js, json"
+  "ext": "ts, js, json",
+  "execMap": {
+    "ts": "npx ts-node"
+  }
 }
