@@ -8,7 +8,7 @@ declare module 'fastify' {
   }
 }
 
-const mysql: FastifyPluginAsync = async (fastify) => {
+export const mysql: FastifyPluginAsync = fp(async (fastify) => {
   fastify.register(fastifyMysql, {
     promise: true,
     host: process.env.DB_HOST,
@@ -16,6 +16,4 @@ const mysql: FastifyPluginAsync = async (fastify) => {
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
   });
-};
-
-export default fp(mysql);
+});
