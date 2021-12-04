@@ -4,7 +4,6 @@
   "description": "",
   "main": ".build/app.js",
   "scripts": {
-    "dev": "nodemon -r dotenv/config src/app.ts",
     "build": "tsc -p tsconfig.json",
     "start": "npm run build && node -r dotenv/config .build/app.js"
   },
@@ -23,6 +22,7 @@
     "@typescript-eslint/parser": "^4.31.1",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
+    "kill-port": "^1.6.1",
     "mysql2": "^2.3.0",
     "nodemon": "^2.0.12",
     "ts-node": "^10.2.1",
