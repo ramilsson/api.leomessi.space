@@ -1,14 +1,18 @@
-import { MySQLPromisePool } from 'fastify-mysql';
 import { RowDataPacket } from 'mysql2';
 
-export interface IGameRepository {
-  mysql: MySQLPromisePool;
-
-  getGames: () => Promise<IGameRow[]>;
-  getGame: (id: number) => Promise<IGameRow>;
+export enum GameStatus {
+  NOT_STARTED = 'NOT_STARTED',
+  STARTED = 'STARTED',
+  FINISHED = 'FINISHED',
+  CANCELED = 'CANCELED',
 }
 
-export interface IGameRow extends RowDataPacket {
+export enum GameField {
+  HOME = 'HOME',
+  AWAY = 'AWAY',
+}
+
+export interface GameRow extends RowDataPacket {
   id: number;
   team: {
     id: number;
@@ -23,13 +27,13 @@ export interface IGameRow extends RowDataPacket {
     name: string;
   };
   season: string;
-  round: string;
-  field: string;
+  round: string | null;
+  field: GameField | null;
   stadium: {
     id: number;
     name: string;
   };
-  status: number;
+  status: GameStatus;
   datetime: string;
   result: {
     fulltime: string | null;

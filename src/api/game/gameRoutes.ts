@@ -1,12 +1,12 @@
 import fp from 'fastify-plugin';
-import gameService from '../services';
+import { gameService } from './gameService';
 import { FastifyPluginAsync } from 'fastify';
 
-interface IParams {
+interface Params {
   id: string;
 }
 
-const gameRoutes: FastifyPluginAsync = async (fastify) => {
+export const gameRoutes: FastifyPluginAsync = fp(async (fastify) => {
   await fastify.register(gameService);
 
   fastify.get('/games', async (request, reply) => {
@@ -15,12 +15,10 @@ const gameRoutes: FastifyPluginAsync = async (fastify) => {
   });
 
   fastify.get<{
-    Params: IParams;
+    Params: Params;
   }>('/games/:id', async (request, reply) => {
     const id = Number(request.params.id);
     const game = await fastify.gameService.getGame(id);
     reply.send(game);
   });
-};
-
-export default fp(gameRoutes);
+});
