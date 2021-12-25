@@ -1,9 +1,8 @@
 import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
-
-import { goalRoutes } from './goalRoutes';
-
-import { IGoalRepository, IGoalService } from './interfaces';
+import { goalController } from './goal.controller';
+import { IGoalRepository } from './goal.repository';
+import { IGoalService } from './goal.service';
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -13,5 +12,5 @@ declare module 'fastify' {
 }
 
 export const goalApi: FastifyPluginAsync = fp(async (fastify) => {
-  fastify.register(goalRoutes);
+  fastify.register(goalController);
 });

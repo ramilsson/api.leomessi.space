@@ -1,10 +1,11 @@
 import { RowDataPacket } from 'mysql2';
+import { Static } from '@sinclair/typebox';
+import { Player } from 'api/player/types';
+import { Team } from 'api/team/types';
+import { GET_GOAL_PARAMS_SCHEMA, GET_GOALS_QUERY_SCHEMA } from './schema';
 
-export interface GoalsParams {
-  gameId?: number;
-  playerId?: number;
-  assistantId?: number;
-}
+export type GetGoalsQuery = Static<typeof GET_GOALS_QUERY_SCHEMA>;
+export type GetGoalParams = Static<typeof GET_GOAL_PARAMS_SCHEMA>;
 
 export enum GoalType {
   DEFAULT = 'DEFAULT',
@@ -12,21 +13,12 @@ export enum GoalType {
   PENALTY = 'PENALTY',
 }
 
-export interface GoalRow extends RowDataPacket {
+export interface Goal extends RowDataPacket {
   id: number;
-  player: {
-    id: number;
-    name: string;
-  };
-  assistant: {
-    id: number;
-    name: string;
-  };
-  gameId: number; // should I get all data of game? (learn HTTP API)
-  team: {
-    id: number;
-    name: string;
-  };
   type: GoalType;
   timing: string;
+  gameId: number;
+  player: Player;
+  assistant: Player | null;
+  team: Team;
 }

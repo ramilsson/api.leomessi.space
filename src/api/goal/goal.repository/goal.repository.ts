@@ -1,8 +1,9 @@
 import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
 import { MySQLPromisePool } from 'fastify-mysql';
-import { IGoalRepository } from './interfaces';
-import { GoalRow, GoalsParams } from './types';
+import { getGoalsSQL, getGoalSQL } from './sql';
+import { Goal, GetGoalsQuery } from '../types';
+import { IGoalRepository } from './types';
 
 class GoalRepository implements IGoalRepository {
   mysql: MySQLPromisePool;
@@ -11,19 +12,17 @@ class GoalRepository implements IGoalRepository {
     this.mysql = mysql;
   }
 
-  getGoals = async (params?: GoalsParams): Promise<GoalRow[]> => {
+  getGoals = async (query?: GetGoalsQuery): Promise<Goal[]> => {
     const connection = await this.mysql.getConnection();
-    const [rows] = await connection.execute<GoalRow[]>(`SELECT * from goals`);
-
+    const [rows] = await connection.execute<Goal[]>(getGoalsSQL(query));
     connection.release();
 
     return rows;
   };
 
-  getGoal = async (id: number): Promise<GoalRow> => {
+  getGoal = async (id: number): Promise<Goal> => {
     const connection = await this.mysql.getConnection();
-    const [rows] = await connection.execute<GoalRow[]>(``);
-
+    const [rows] = await connection.execute<Goal[]>(getGoalSQL(id));
     connection.release();
 
     return rows[0];

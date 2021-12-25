@@ -1,8 +1,8 @@
 import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
-import { goalRepository } from './goalRepository';
-import { IGoalRepository, IGoalService } from './interfaces';
-import { GoalsParams } from './types';
+import { goalRepository, IGoalRepository } from '../goal.repository';
+import { GetGoalsQuery } from '../types';
+import { IGoalService } from './types';
 
 class GoalService implements IGoalService {
   repository: IGoalRepository;
@@ -11,8 +11,8 @@ class GoalService implements IGoalService {
     this.repository = repository;
   }
 
-  getGoals = async (params?: GoalsParams) => {
-    const goals = await this.repository.getGoals(params);
+  getGoals = async (query?: GetGoalsQuery) => {
+    const goals = await this.repository.getGoals(query);
     return goals;
   };
 
