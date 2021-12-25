@@ -39,8 +39,9 @@
   },
   "_moduleAliases": {
     "api": "./src/api",
-    "const": "./src/const",
+    "plugins": "./src/plugins",
     "utils": "./src/utils",
+    "const": "./src/const",
     "types": "./src/types"
   }
 }
