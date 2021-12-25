@@ -1,23 +1,24 @@
-import fastify from 'fastify';
+import 'module-alias/register';
+
+import Fastify from 'fastify';
 import { plugins } from './plugins';
 import { api } from './api';
 
-const server = fastify({
+const fastify = Fastify({
   logger: {
-    prettyPrint: {
-      levelFirst: true,
-    },
+    prettyPrint: { levelFirst: true },
   },
+  ignoreTrailingSlash: true,
 });
 
-server.register(plugins);
-server.register(api);
+fastify.register(plugins);
+fastify.register(api);
 
 const start = async () => {
   try {
-    await server.listen(process.env.PORT || 8000);
+    await fastify.listen(process.env.PORT || 8000);
   } catch (error) {
-    server.log.error(error);
+    fastify.log.error(error);
     process.exit(1);
   }
 };
