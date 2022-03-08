@@ -1,6 +1,6 @@
 import fp from 'fastify-plugin';
-import { FastifyPluginAsync } from 'fastify';
 import { gameRepository } from './gameRepository';
+import { normalizeGameResult } from './utils';
 import { IGameRepository, IGameService } from './interfaces';
 
 class GameService implements IGameService {
@@ -11,17 +11,31 @@ class GameService implements IGameService {
   }
 
   getGames = async () => {
-    const games = await this.repository.getGames();
+    const gameRows = await this.repository.getGames();
+
+    const games = gameRows.map((gameRow) => {
+      return {
+        ...gameRow,
+        result: normalizeGameResult(gameRow.result),
+      };
+    });
+
     return games;
   };
 
   getGame = async (id: number) => {
-    const game = await this.repository.getGame(id);
+    const gameRow = await this.repository.getGame(id);
+
+    const game = {
+      ...gameRow,
+      result: normalizeGameResult(gameRow.result),
+    };
+
     return game;
   };
 }
 
-export const gameService: FastifyPluginAsync = fp(async (fastify) => {
+export const gameService = fp(async (fastify) => {
   await fastify.register(gameRepository);
   fastify.decorate('gameService', new GameService(fastify.gameRepository));
 });

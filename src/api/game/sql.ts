@@ -1,6 +1,11 @@
 export const getGamesSQL = (): string => `
     SELECT
-        games.id 'id',
+        game.id 'id',
+        game.field 'field',
+        game.round 'round',
+        game.season 'season',
+        game.status 'status',
+        game.datetime 'datetime',
         json_object (
             'id', team.id,
             'name', team.name
@@ -10,34 +15,34 @@ export const getGamesSQL = (): string => `
             'name', opponent.name
         ) 'opponent',
         json_object (
-            'id', competitions.id,
-            'name', competitions.name
+            'id', competition.id,
+            'name', competition.name
         ) 'competition',
-        games.season 'season',
-        games.round 'round',
-        games.field 'field',
         json_object (
-            'id', stadiums.id,
-            'name', stadiums.name
+            'id', stadium.id,
+            'name', stadium.name
         ) 'stadium',
-        games.status 'status',
-        games.datetime 'datetime',
         json_object (
-            'fulltime', games.fulltime_result,
-            'overtime', games.overtime_result,
-            'penalty', games.penalty_result
+            'fulltime', game.fulltime_result,
+            'overtime', game.overtime_result,
+            'penalty', game.penalty_result
         ) 'result'
-    FROM games
-    LEFT JOIN teams AS team ON games.team = team.id
-    LEFT JOIN teams AS opponent ON games.opponent = opponent.id
-    LEFT JOIN competitions ON games.competition = competitions.id
-    LEFT JOIN stadiums ON games.stadium = stadiums.id
-    GROUP BY games.id
+    FROM game
+    LEFT JOIN club AS team ON game.team_id = team.id
+    LEFT JOIN club AS opponent ON game.opponent_id = opponent.id
+    LEFT JOIN competition ON game.competition_id = competition.id
+    LEFT JOIN stadium ON game.stadium_id = stadium.id
+    ORDER BY game.id
 `;
 
 export const getGameSQL = (id: number): string => `
     SELECT
-        games.id 'id',
+        game.id 'id',
+        game.field 'field',
+        game.round 'round',
+        game.season 'season',
+        game.status 'status',
+        game.datetime 'datetime',
         json_object (
             'id', team.id,
             'name', team.name
@@ -47,28 +52,23 @@ export const getGameSQL = (id: number): string => `
             'name', opponent.name
         ) 'opponent',
         json_object (
-            'id', competitions.id,
-            'name', competitions.name
+            'id', competition.id,
+            'name', competition.name
         ) 'competition',
-        games.season 'season',
-        games.round 'round',
-        games.field 'field',
         json_object (
-            'id', stadiums.id,
-            'name', stadiums.name
+            'id', stadium.id,
+            'name', stadium.name
         ) 'stadium',
-        games.status 'status',
-        games.datetime 'datetime',
         json_object (
-            'fulltime', games.fulltime_result,
-            'overtime', games.overtime_result,
-            'penalty', games.penalty_result
+            'fulltime', game.fulltime_result,
+            'overtime', game.overtime_result,
+            'penalty', game.penalty_result
         ) 'result'
-    FROM games
-    LEFT JOIN teams AS team ON games.team = team.id
-    LEFT JOIN teams AS opponent ON games.opponent = opponent.id
-    LEFT JOIN competitions ON games.competition = competitions.id
-    LEFT JOIN stadiums ON games.stadium = stadiums.id
-    WHERE games.id = ${id}
+    FROM game
+    LEFT JOIN club AS team ON game.team_id = team.id
+    LEFT JOIN club AS opponent ON game.opponent_id = opponent.id
+    LEFT JOIN competition ON game.competition_id = competition.id
+    LEFT JOIN stadium ON game.stadium_id = stadium.id
+    WHERE game.id = ${id}
     LIMIT 1
 `;

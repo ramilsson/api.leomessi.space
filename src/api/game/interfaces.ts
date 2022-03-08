@@ -1,5 +1,5 @@
 import { MySQLPromisePool } from 'fastify-mysql';
-import { GameRow } from './types';
+import { GameRow, Game } from './types';
 
 export interface IGameRepository {
   mysql: MySQLPromisePool;
@@ -11,6 +11,6 @@ export interface IGameRepository {
 export interface IGameService {
   repository: IGameRepository;
 
-  getGames: () => Promise<GameRow[]>;
-  getGame: (id: number) => Promise<GameRow>;
+  getGames: () => Promise<Game[]>;
+  getGame: (id: number) => Promise<Game>;
 }
