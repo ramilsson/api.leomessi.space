@@ -1,4 +1,7 @@
-export const getGamesSQL = (): string => `
+import { GetGamesQuery } from '../types';
+import { getSQLByQuery } from 'utils';
+
+export const getGamesSQL = (query?: GetGamesQuery): string => `
     SELECT
         game.id 'id',
         game.field 'field',
@@ -32,7 +35,7 @@ export const getGamesSQL = (): string => `
     LEFT JOIN club AS opponent ON game.opponent_id = opponent.id
     LEFT JOIN competition ON game.competition_id = competition.id
     LEFT JOIN stadium ON game.stadium_id = stadium.id
-    ORDER BY game.id
+    ${getSQLByQuery('game', query)}
 `;
 
 export const getGameSQL = (id: number): string => `

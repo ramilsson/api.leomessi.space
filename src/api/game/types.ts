@@ -1,4 +1,9 @@
 import { RowDataPacket } from 'mysql2';
+import { Static } from '@sinclair/typebox';
+import { GET_GAME_PARAMS_SCHEMA, GET_GAMES_QUERY_SCHEMA } from './schema';
+
+export type GetGamesQuery = Static<typeof GET_GAMES_QUERY_SCHEMA>;
+export type GetGameParams = Static<typeof GET_GAME_PARAMS_SCHEMA>;
 
 export enum GameStatus {
   NOT_STARTED = 'NOT_STARTED',

@@ -1,8 +1,8 @@
 import fp from 'fastify-plugin';
 import { MySQLPromisePool } from 'fastify-mysql';
 import { getGamesSQL, getGameSQL } from './sql';
-import { IGameRepository } from './interfaces';
-import { GameRow } from './types';
+import { GameRow, GetGamesQuery } from '../types';
+import { IGameRepository } from './types';
 
 class GameRepository implements IGameRepository {
   mysql: MySQLPromisePool;
@@ -11,9 +11,9 @@ class GameRepository implements IGameRepository {
     this.mysql = mysql;
   }
 
-  getGames = async () => {
+  getGames = async (query?: GetGamesQuery) => {
     const connection = await this.mysql.getConnection();
-    const [rows] = await connection.execute<GameRow[]>(getGamesSQL());
+    const [rows] = await connection.execute<GameRow[]>(getGamesSQL(query));
 
     connection.release();
 

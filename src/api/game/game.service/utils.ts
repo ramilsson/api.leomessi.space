@@ -1,4 +1,4 @@
-import { GameRowResult, GameResult } from './types';
+import { GameRowResult, GameResult } from '../types';
 
 export const normalizeGameResult = (result: GameRowResult): GameResult => {
   const fulltime = result.fulltime?.split('-').map((v) => Number(v)) || null;
