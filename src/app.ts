@@ -5,9 +5,7 @@ import { plugins } from './plugins';
 import { api } from './api';
 
 const fastify = Fastify({
-  logger: {
-    prettyPrint: { levelFirst: true },
-  },
+  logger: { prettyPrint: { levelFirst: true } },
   ignoreTrailingSlash: true,
 });
 

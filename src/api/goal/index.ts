@@ -1,4 +1,3 @@
-import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
 import { goalController } from './goal.controller';
 import { IGoalRepository } from './goal.repository';
@@ -12,7 +11,7 @@ declare module 'fastify' {
   }
 }
 
-export const goalApi: FastifyPluginAsync = fp(async (fastify) => {
+export const goalApi: FastifyPluginAsync = async (fastify) => {
   fastify.register(goalController);
   fastify.addSchema(GoalSchema);
-});
+};

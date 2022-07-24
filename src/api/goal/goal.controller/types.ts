@@ -1,4 +1,4 @@
-import { GoalListQuery, GetGoalParams } from '../types';
+import { GoalListQuery, GetGoalParams } from '../goal.types';
 
 export interface GetGoalsRoute {
   Querystring: GoalListQuery;

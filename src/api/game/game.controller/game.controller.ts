@@ -1,11 +1,10 @@
-import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
 import { gameService } from '../game.service';
 import { GET_GAMES_SCHEMA, GET_GAME_SCHEMA } from '../game.schema';
 import { GetGamesRoute, GetGameRoute } from './types';
 
-export const gameController: FastifyPluginAsync = fp(async (fastify) => {
-  await fastify.register(gameService);
+export const gameController: FastifyPluginAsync = async (fastify) => {
+  fastify.register(gameService);
 
   fastify.route<GetGamesRoute>({
     method: 'GET',
@@ -28,4 +27,4 @@ export const gameController: FastifyPluginAsync = fp(async (fastify) => {
       return game;
     },
   });
-});
+};
