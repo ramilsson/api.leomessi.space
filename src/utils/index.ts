@@ -1,1 +1,0 @@
-export { getSQLByQuery } from './getSQLByQuery';

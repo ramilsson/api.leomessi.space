@@ -1,9 +1,9 @@
-import { GetGamesQuery, GetGameParams } from '../types';
+import { GameListQuery, GameParams } from '../types';
 
 export interface GetGamesRoute {
-  Querystring: GetGamesQuery;
+  Querystring: GameListQuery;
 }
 
 export interface GetGameRoute {
-  Params: GetGameParams;
+  Params: GameParams;
 }

@@ -2,7 +2,7 @@ import fp from 'fastify-plugin';
 import { gameRepository } from '../game.repository';
 import { normalizeGameResult } from './utils';
 import { IGameRepository } from '../game.repository/types';
-import { GetGamesQuery } from '../types';
+import { GameListQuery } from '../game.types';
 import { IGameService } from './types';
 
 class GameService implements IGameService {
@@ -12,7 +12,7 @@ class GameService implements IGameService {
     this.repository = repository;
   }
 
-  getGames = async (query?: GetGamesQuery) => {
+  getGames = async (query?: GameListQuery) => {
     const gameRows = await this.repository.getGames(query);
 
     const games = gameRows.map((gameRow) => {

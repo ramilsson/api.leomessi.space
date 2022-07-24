@@ -1,19 +1,14 @@
-import { Query } from 'types';
-import {
-  DEFAULT_PAGE,
-  DEFAULT_SORT,
-  DEFAULT_LIMIT,
-  DEFAULT_ORDER,
-} from 'const';
+import { ListQuery } from './types';
+import { DEFAULT_LIST_QUERY } from './const';
 
-export const getSQLByQuery = (table: string, query?: Query): string => {
+export const getSQLByQuery = (table: string, query?: ListQuery): string => {
   if (!query) return '';
 
   const {
-    page = DEFAULT_PAGE,
-    limit = DEFAULT_LIMIT,
-    sort = DEFAULT_SORT,
-    order = DEFAULT_ORDER,
+    page = DEFAULT_LIST_QUERY.page,
+    limit = DEFAULT_LIST_QUERY.limit,
+    sort = DEFAULT_LIST_QUERY.sort,
+    order = DEFAULT_LIST_QUERY.order,
     ...rest
   } = query;
 

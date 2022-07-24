@@ -1,4 +1,5 @@
-import { GameRowResult, GameResult } from '../types';
+import { GameRowResult } from '../game.repository/types';
+import { GameResult } from '../game.types';
 
 export const normalizeGameResult = (result: GameRowResult): GameResult => {
   const fulltime = result.fulltime?.split('-').map((v) => Number(v)) || null;
@@ -11,5 +12,10 @@ export const normalizeGameResult = (result: GameRowResult): GameResult => {
   const total: GameResult['total'] =
     totalHomeScore !== null && totalAwayScore !== null ? [totalHomeScore, totalAwayScore] : null;
 
-  return { fulltime, overtime, penalty, total };
+  return {
+    fulltime: fulltime as [number, number] | null,
+    overtime: overtime as [number, number] | null,
+    penalty: penalty as [number, number] | null,
+    total: total as [number, number] | null,
+  };
 };

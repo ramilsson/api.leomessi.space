@@ -1,9 +1,12 @@
 import { MySQLPromisePool } from 'fastify-mysql';
-import { Goal, GetGoalsQuery } from '../types';
+import { RowDataPacket } from 'mysql2';
+import { Goal, GoalListQuery } from '../goal.types';
+
+export interface GoalRow extends Goal, RowDataPacket {}
 
 export interface IGoalRepository {
   mysql: MySQLPromisePool;
 
-  getGoals: (query?: GetGoalsQuery) => Promise<Goal[]>;
-  getGoal: (id: number) => Promise<Goal>;
+  getGoals: (query?: GoalListQuery) => Promise<GoalRow[]>;
+  getGoal: (id: number) => Promise<GoalRow>;
 }

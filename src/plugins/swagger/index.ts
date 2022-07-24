@@ -18,19 +18,10 @@ export const swagger: FastifyPluginAsync = fp(async (fastify) => {
       schemes: ['http'],
       consumes: ['application/json'],
       produces: ['application/json'],
-      tags: [{ name: 'goals', description: 'Goal related endpoints' }],
-      definitions: {
-        example: {
-          type: 'object',
-          required: ['id', 'email'],
-          properties: {
-            id: { type: 'string', format: 'uuid' },
-            firstName: { type: 'string' },
-            lastName: { type: 'string' },
-            email: { type: 'string', format: 'email' },
-          },
-        },
-      },
+      tags: [
+        { name: 'games', description: 'Game related endpoints' },
+        { name: 'goals', description: 'Goal related endpoints' },
+      ],
       securityDefinitions: {
         apiKey: {
           type: 'apiKey',

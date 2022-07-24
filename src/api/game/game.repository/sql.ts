@@ -1,7 +1,7 @@
-import { GetGamesQuery } from '../types';
-import { getSQLByQuery } from 'utils';
+import { GameListQuery } from '../game.types';
+import { getSQLByQuery } from 'api/utils';
 
-export const getGamesSQL = (query?: GetGamesQuery): string => `
+export const getGamesSQL = (query?: GameListQuery): string => `
     SELECT
         game.id 'id',
         game.field 'field',

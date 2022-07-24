@@ -1,7 +1,7 @@
-import { getSQLByQuery } from 'utils';
-import { GetGoalsQuery } from '../types';
+import { getSQLByQuery } from 'api/utils';
+import { GoalListQuery } from '../goal.types';
 
-export const getGoalsSQL = (query?: GetGoalsQuery): string => {
+export const getGoalsSQL = (query?: GoalListQuery): string => {
   return `
         SELECT
             goal.id 'id',

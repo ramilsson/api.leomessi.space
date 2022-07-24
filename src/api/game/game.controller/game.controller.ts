@@ -1,7 +1,7 @@
 import fp from 'fastify-plugin';
 import { FastifyPluginAsync } from 'fastify';
 import { gameService } from '../game.service';
-import { GET_GAMES_SCHEMA, GET_GAME_SCHEMA } from '../schema';
+import { GET_GAMES_SCHEMA, GET_GAME_SCHEMA } from '../game.schema';
 import { GetGamesRoute, GetGameRoute } from './types';
 
 export const gameController: FastifyPluginAsync = fp(async (fastify) => {

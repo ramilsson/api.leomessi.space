@@ -1,12 +1,18 @@
-import { Type } from '@sinclair/typebox';
-import { DEFAULT_PAGE, DEFAULT_LIMIT, DEFAULT_SORT, DEFAULT_ORDER } from 'const';
-import { OrderType } from 'types';
+import { Type as T, Static as S, TSchema, TUnsafe } from '@sinclair/typebox';
 
-export const GET_LIST_QUERY = {
-  page: Type.Optional(Type.Number({ default: DEFAULT_PAGE })),
-  limit: Type.Optional(Type.Number({ default: DEFAULT_LIMIT })),
-  sort: Type.Optional(Type.String({ default: DEFAULT_SORT })),
-  order: Type.Optional(Type.Enum(OrderType, { default: DEFAULT_ORDER })),
+export const TNullable = <H extends TSchema>(schema: H): TUnsafe<S<H, []> | null> => {
+  return T.Unsafe<S<H> | null>({ ...schema, nullable: true });
 };
 
-export const GET_LIST_QUERY_SCHEMA = Type.Object(GET_LIST_QUERY);
+export const TStringEnum = <V extends string[]>(values: [...V]): TUnsafe<V[number]> => {
+  return T.Unsafe<V[number]>({ type: 'string', enum: values });
+};
+
+export const ListQuerySchemaProps = {
+  page: T.Optional(T.Number()),
+  limit: T.Optional(T.Number()),
+  sort: T.Optional(T.String()),
+  order: T.Optional(TStringEnum(['ASC', 'DESC'])),
+};
+
+export const ListQuerySchema = T.Object(ListQuerySchemaProps);
