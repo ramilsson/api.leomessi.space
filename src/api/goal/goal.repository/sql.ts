@@ -6,7 +6,7 @@ export const getGoalsSQL = (query?: GoalListQuery): string => {
         SELECT
             goal.id 'id',
             goal.type 'type',
-            goal.game_id 'gameId',
+            goal.game_id 'game_id',
             goal.timing 'timing',
             JSON_OBJECT(
                 'id', player.id,
